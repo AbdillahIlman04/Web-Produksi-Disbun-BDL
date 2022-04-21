@@ -15,15 +15,18 @@ return new class extends Migration
     {
         Schema::create('areaproduksis', function (Blueprint $table) {
             $table->bigIncrements('id');
+            // $table->foreignId('areaproduksi_id')->constrained();
             $table->string('komoditi');
             $table->double('tm');
             $table->double('tbm');
             $table->double('tr');
             $table->double('produksi');
             $table->double('produktivitas');
+            $table->double('jml_petani');
             $table->string('bentuk_hasil');
             $table->timestamps();
         });
+    
     }
 
     /**

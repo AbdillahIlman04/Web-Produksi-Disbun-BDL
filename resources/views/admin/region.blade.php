@@ -5,7 +5,7 @@
 <main id="main" class="main">
 
   <div class="pagetitle">
-    <h1 class="d-flex justify-content-center mt-3">Luas Area dan Produksi Perkebunan Rakyat</h1>
+    <h1 class="d-flex justify-content-center mt-3">Luas Areal dan Produksi Perkebunan Rakyat</h1>
   </div><!-- End Page Title -->
 
   <section class="section">
@@ -15,7 +15,7 @@
           @csrf
           <div class="col-md-3 ">
             <select name="kabupaten" id="kabupaten" class="form-select">
-              <option selected>Kabupaten</option>
+              <option selected hidden>Kabupaten</option>
               @foreach ($regencies as $kabupaten)
               <option value="{{ $kabupaten->id }}">{{ $kabupaten->name }}</option>
           @endforeach
@@ -23,19 +23,19 @@
           </div>
           <div class="col-md-3 ms-3">
             <select name="kecamatan" id="kecamatan" class="form-select">
-              <option selected>Kecamatan</option>
+              <option selected hidden>Kecamatan</option>
             </select>
           </div>
 
           <div class="col-md-2 ms-3">
             <select name="tahun" id="tahun" class="form-select">
-              <option selected>Tahun</option>
+              <option selected hidden>Tahun</option>
               @foreach ($tahuns as $tahun)
               <option>{{ $tahun->year }}</option>
           @endforeach
             </select>
           </div>
-          <button type="submit" title="Search" class="ms-2 btn btn-primary"><i class="bi bi-search"></i></button>
+          <button type="submit" title="Search" id="search" name="search" class="ms-2 btn btn-primary"><i class="bi bi-search"></i></button>
         </form>
 
       <div class="col-lg-8 d-flex justify-content-center mt-3">
@@ -65,6 +65,7 @@
                         <th class="text-center" scope="col">Aksi</th>
                       </tr>
                     </thead>
+                    {{-- @if ($lampung->count()) --}}
                     <tbody>
                       @php
                       $no = 1;
@@ -96,6 +97,7 @@
                       </tr>
                       @endforeach
                     </tbody>
+                    {{-- @endif --}}
                   </table>
                   <!-- End Table with stripped rows -->
     
@@ -109,7 +111,7 @@
     </div>
 
     {{-- Modal add --}}
-   
+   @foreach ($lampung as $region)
     <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -118,24 +120,24 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <form action="/create" method="POST" enctype="multipart/form-data">
+              <form action="/create" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="col-md-3 ms-3 d-inline">
-                  <select name="kabupaten_id" id="modalkabupaten" onchange="updatemodalkabupaten()" class="form-select">
-                    <option selected>Kabupaten</option>
+                  <select name="kabupaten_id" id="{{ $region->regency->id }}" onchange="modalKabupaten(this)" class="form-select">
+                    <option value="{{ $region->id }}" selected hidden>Kabupaten</option>
                     @foreach ($regencies as $modalkabupaten)
                     <option value="{{ $modalkabupaten->id }}">{{ $modalkabupaten->name }}</option>
                     @endforeach
                   </select>
                 </div>
                 <div class="col-md-3 ms-3 d-inline">
-                  <select name="kecamatan_id" id="modalkecamatan" class="form-select">
-                    <option selected>Kecamatan</option>
+                  <select name="kecamatan_id" id="modalkecamatan{{ $region->regency->id }}" class="form-select">
+                    <option value="{{ $region->id }}" selected hidden>Kecamatan</option>
                   </select>
                 </div>
                 <div class="col-md-2 ms-3 d-inline">
                   <select name="tahun" id="tahun" class="form-select">
-                    <option selected>Tahun</option>
+                    <option selected hidden>Tahun</option>
                     @foreach ($tahuns as $tahun)
                     <option>{{ $tahun->year }}</option>
                     @endforeach
@@ -150,6 +152,7 @@
           </div>
         </div>
       </div>
+      @endforeach
       
       
 
@@ -170,23 +173,23 @@
             <form action="/update/{{ $item->id }}" method="POST" enctype="multipart/form-data">
               @csrf
               <div class="col-md-3 ms-3 d-inline">
-                <select name="updatekabupaten_id" id="updatemodalkabupaten" onchange="updatemodalgetkabupaten()" class="form-select">
-                  <option value="{{ $item->id }} " selected>{{ $item->regency->name }}</option>
+                <select name="updatekabupaten_id" id="{{ $item->regency->id }}" onchange="updateModalKabupaten(this)" class="form-select">
+                  <option value="{{ $item->id }} " selected hidden>{{ $item->regency->name }}</option>
                   @foreach ($regencies as $updatemodalkabupaten)
                   <option value="{{ $updatemodalkabupaten->id }} "> {{ $updatemodalkabupaten->name }}  </option>
                   @endforeach
                 </select>
               </div>
               <div class="col-md-3 ms-3 d-inline">
-                <select name="updatekecamatan_id" id="updatemodalkecamatan" class="form-select">
-                  <option value="{{ $item->id }}" selected>{{ $item->district->name }}</option>
+                <select name="updatekecamatan_id" id="updatemodalkecamatan{{ $item->regency->id }}" class="form-select">
+                  <option value="{{ $item->id }}" selected hidden>{{ $item->district->name }}</option>
                 </select>
               </div>
               <div class="col-md-2 ms-3 d-inline">
-                <select name="tahun" id="tahun{{ $item->id }}" class="form-select">
-                  <option value="{{ $item->id }} "selected>{{ $item->tahun }}</option>
+                <select name="tahun" id="tahun" class="form-select">
+                  <option selected hidden>{{ $item->tahun }}</option>
                   @foreach ($tahuns as $tahun)
-                  <option value="{{ $item->id }}"{{ old('tahun') == $item->id ? 'selected' : null }}>{{ $tahun->year }}</option>
+                  <option value="{{ $tahun->year }}"{{ old('tahun') == $item->id ? 'selected' : null }}>{{ $tahun->year }}</option>
                   @endforeach
                 </select>
               </div>

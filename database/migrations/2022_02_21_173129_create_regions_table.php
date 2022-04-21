@@ -24,7 +24,7 @@ return new class extends Migration
         });
         Schema::table('regions', function (Blueprint $table) {
             $table->foreign('kabupaten_id')->references('id')->on('regencies')->onDelete('cascade')->onUpdate('cascade');
-            // $table->foreign('kecamatan_id')->references('id')->on('districts')->onDelete('cascade')->onUpdate('cascade');  
+             $table->foreign('kecamatan_id')->references('id')->on('districts')->onDelete('cascade')->onUpdate('cascade');  
         });
     }
 

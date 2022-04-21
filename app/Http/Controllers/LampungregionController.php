@@ -30,7 +30,7 @@ class LampungregionController extends Controller
 
         $kecamatans = District::where('regency_id',$id_kabupaten)->get();
 
-        $option = "<option >Pilih Kecamatan..</option>";
+        $option = "<option selected hidden>Pilih Kecamatan..</option>";
 
         foreach($kecamatans as $kecamatan){
             $option.= "<option value='$kecamatan->id'>$kecamatan->name<option>";

@@ -22,64 +22,72 @@ class RegionController extends Controller
         // $lampung = region::with('regency')->get();
         $lampung = region::all();
 
-        for($i=0;$i<$lampung->count(); $i++){
-            $kabupaten = $lampung[$i]->kabupaten_id;
-        }
+        // for($i=0;$i<$lampung->count(); $i++){
+        //     $kabupaten = $lampung[$i]->kabupaten_id;
+        // }
 
-        $getkabupaten = Regency::where('id',$kabupaten)->with('regency')->get('name');
+        // $getkabupaten = Regency::where('id',$kabupaten)->with('regency')->get('name');
         
-        for($i=0;$i<$lampung->count(); $i++){
-            $kecamatan = $lampung[$i]->kecamatan_id;
-        }
-        $getkecamatan = District::where('id',$kecamatan)->with('district')->get('name');
+        // for($i=0;$i<$lampung->count(); $i++){
+        //     $kecamatan = $lampung[$i]->kecamatan_id;
+        // }
+        // $getkecamatan = District::where('id',$kecamatan)->with('district')->get('name');
         
 
         for($i=0;$i<$lampung->count(); $i++){
             $tahunn = $lampung[$i]->tahun;
         }
 
-
-        return view('admin.region',compact('regencies','tahuns','lampung','getkabupaten','getkecamatan','tahunn'),[
+        return view('admin.region',compact('regencies','tahuns','lampung'),[
 
             "title"=>"Produksi Disbun | Region"
         ]);
     }
 
-    public function getkecamatan(request $request){
+    public function getkecamatans(request $request){
         $id_kabupaten = $request->id_kabupaten;
 
-        $kecamatans = District::where('regency_id',$id_kabupaten)->get('name');
+        $kecamatans = District::where('regency_id',$id_kabupaten)->with('district')->get(['name','id']);
 
-        $option = "<option >Pilih Kecamatan..</option>";
+        $option = "<option selected hidden >Pilih Kecamatan..</option>";
 
-        foreach($kecamatans as $kecamatan){
-            $option.= "<option value='$kecamatan->id'>$kecamatan->name<option>";
+        foreach($kecamatans as $modalkecamatan){
+            $option.= "<option value='$modalkecamatan->id'>$modalkecamatan->name</option>";
         }
         echo $option;
+      
     }
     public function modalgetkecamatan(request $request){
         $id_kabupaten = $request->id_kabupaten;
 
-        $kecamatans = District::where('regency_id',$id_kabupaten)->get();
+        $kecamatans = District::where('regency_id',$id_kabupaten)->with('district')->get(['name','id']);
 
-        $option = "<option >Pilih Kecamatan..</option>";
+        $option = "<option selected hidden >Pilih Kecamatan..</option>";
 
         foreach($kecamatans as $modalkecamatan){
-            $option.= "<option value='$modalkecamatan->id'>$modalkecamatan->name<option>";
+            $option.= "<option value='$modalkecamatan->id'>$modalkecamatan->name</option>";
         }
-        echo $option;
+
+        return response()->json([
+            'data' => $option,
+            'id' => $request->id_region
+        ]);
     }
     public function updatemodalgetkecamatan(request $request){
         $id_kabupaten = $request->id_kabupaten;
 
-        $kecamatans = District::where('regency_id',$id_kabupaten)->with('district')->get('name');
+        $kecamatans = District::where('regency_id',$id_kabupaten)->with('district')->get(['name','id']);
 
-        $option = "<option >$kecamatans</option>";
+        $option = "<option selected hidden >Pilih Kecamatan..</option>";
 
         foreach($kecamatans as $updatemodalkecamatan){
-            $option.= "<option value='$updatemodalkecamatan->id'>$updatemodalkecamatan->name<option>";
+            $option.= "<option value='$updatemodalkecamatan->id'>$updatemodalkecamatan->name</option>";
         }
-        echo $option;
+        
+        return response()->json([
+            'data' => $option,
+            'id' => $request->id_item
+        ]);
     }
 
     /**
@@ -134,19 +142,18 @@ class RegionController extends Controller
      * @param  \App\Models\region  $region
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id,)
     {
-        $lampung = region::find($id);
-        return view('admin.index',compact('lampung'));
         if($request->isMethod('post')){
             $data = $request->all();
 
             region::where(['id'=>$id])->update([
-                'kecamatan_id'=>$data['kecamatan_id'],
-                'kabupaten_id'=>$data['kabupaten_id'],
-                'tahun'=>$data['tahun']
+                'kabupaten_id'=>$data['updatekabupaten_id'],
+                'kecamatan_id'=>$data['updatekecamatan_id'],
+                'tahun'=>$data['tahun'],
+                
             ]);
-            return redirect('region');
+            return redirect()->route('region');
         }
     }
 
@@ -162,5 +169,10 @@ class RegionController extends Controller
         $data->delete();
 
         return redirect()->route('region');
+    }
+
+    public function search($id){
+        $data = region::where("kecamatan",$id)->get();
+        return redirect()->route('region',compact('data'));
     }
 }

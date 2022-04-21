@@ -20,6 +20,9 @@ class areaproduksi extends Model
     public function detailData($id){
         return DB::table('areaproduksis')->where('id',$id)->first();
     }
+    public function area(){
+        return $this->hasOne(region::class,'areaproduksi_id','id');
+    }
 
     
 

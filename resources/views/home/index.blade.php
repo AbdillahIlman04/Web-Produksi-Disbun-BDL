@@ -6,7 +6,7 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1 class="d-flex justify-content-center mt-3">Luas Area dan Produksi Perkebunan Rakyat</h1>
+      <h1 class="d-flex justify-content-center mt-3">Luas Areal dan Produksi Perkebunan Rakyat</h1>
     </div><!-- End Page Title -->
 
     <section class="section">
@@ -15,7 +15,7 @@
           <form class="search-form d-flex align-items-center mt-4" method="POST" action="#">
             <div class="col-md-3">
               <select id="kabupaten" class="form-select">
-                <option selected>Kabupaten</option>
+                <option selected hidden>Kabupaten</option>
                 @foreach ($regencies as $kabupaten)
                 <option value="{{ $kabupaten->id }}">{{ $kabupaten->name }}</option>
             @endforeach
@@ -23,13 +23,13 @@
             </div>
             <div class="col-md-3 ms-3">
               <select id="kecamatan" class="form-select">
-                <option selected>Kecamatan</option>
+                <option selected hidden>Kecamatan</option>
               </select>
             </div>
   
             <div class="col-md-2 ms-3">
               <select id="tahun" class="form-select">
-                <option selected>Tahun</option>
+                <option selected hidden>Tahun</option>
                 @foreach ($tahuns as $tahun)
                 <option>{{ $tahun->year }}</option>
             @endforeach
@@ -48,8 +48,9 @@
               <th rowspan="2">KOMODITI</th>
               <th colspan="3">KOMPOSISI LUAS AREA
               <th rowspan="2">JUMLAH</th>
-              <th rowspan="2">PODUKSI</th>
-              <th rowspan="2">PRODUKTIVITAS</th>
+              <th rowspan="2">PODUKSI (TON)</th>
+              <th rowspan="2">PRODUKTIVITAS (Kg/Ha)</th>
+              <th rowspan="2">JUMLAH PETANI PEKEBUN (KK)</th>
               <th rowspan="2">BENTUK HASIL</th>
                 <tr>
                   <th>TM</th>
@@ -70,9 +71,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
               </tr>
               <tr>
-                <td>'</td>
+                <td>.</td>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -92,9 +95,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
               </tr>
               <tr>
                 <th>TOTAL I</th>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

@@ -5,7 +5,7 @@
 <main id="main" class="main">
 
   <div class="pagetitle">
-    <h1 class="d-flex justify-content-center mt-3 mb-4">Luas Area dan Produksi Perkebunan Rakyat</h1>
+    <h1 class="d-flex justify-content-center mt-3 mb-4">Luas Areal dan Produksi Perkebunan Rakyat</h1>
   </div><!-- End Page Title -->
 
   <section class="section">
@@ -27,8 +27,9 @@
             <th rowspan="2">KOMODITI</th>
             <th colspan="3">KOMPOSISI LUAS AREA
             <th rowspan="2">JUMLAH</th>
-            <th rowspan="2">PODUKSI</th>
-            <th rowspan="2">PRODUKTIVITAS</th>
+            <th rowspan="2">PODUKSI (TON)</th>
+            <th rowspan="2">PRODUKTIVITAS (Kg/Ha)</th>
+            <th rowspan="2">JUMLAH PETANI PEKEBUN (KK)</th>
             <th rowspan="2">BENTUK HASIL</th>
             <th rowspan="2">Aksi</th>
               <tr>
@@ -51,7 +52,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
+            {{-- @if ($data->count()) --}}
             @php
                 $no = 1;
             @endphp
@@ -66,6 +69,7 @@
               <td>{{ $hasil[$i] }}</td>
               <td>{{ $area->produksi }}</td>
               <td>{{ $area->produktivitas }}</td>
+              <td>{{ $area->jml_petani }}</td>
               <td>{{ $area->bentuk_hasil }}</td>
               <td class="text-center">
                 <a href=" " class="btn btn-success editbtn btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-{{ $area->id }}" >
@@ -81,9 +85,9 @@
             </tr>
             <?php $i++;?>     
             @endforeach
-  
+            {{-- @endif --}}
             <tr>
-              <th>JUMLAH I</th>
+              <th>JUMLAH </th>
               <td>-</td>
               <td>{{ $sumtm }}</td>
               <td>{{ $sumtbm }}</td>
@@ -91,11 +95,12 @@
               <td>{{ $sumHasil }}</td>
               <td>{{ $sumproduksi }}</td>
               <td>{{ $sumproduktivitas }}</td>
+              <td>{{ $sumjmlpetani }}</td>
               <td>-</td>
               <td>-</td>
             </tr>
             <tr>
-              <th>TOTAL I</th>
+              <th>TOTAL </th>
               <td>-</td>
               <td>{{ $sumtm }}</td>
               <td>{{ $sumtbm }}</td>
@@ -103,6 +108,7 @@
               <td>{{ $sumHasil }}</td>
               <td>{{ $sumproduksi }}</td>
               <td>{{ $sumproduktivitas }}</td>
+              <td>{{ $sumjmlpetani }}</td>
               <td>-</td>
               <td>-</td>
             </tr>
@@ -142,11 +148,15 @@
                 <input type="text" class="form-control" id="recipient-name" name="tr">
               </div>
               <div class="mt-2">
-                <label for="recipient-name" class="col-form-label">Produksi:</label>
+                <label for="recipient-name" class="col-form-label">Produksi (ton):</label>
                 <input type="text" class="form-control" id="recipient-name" name="produksi">
               </div>
               <div class="mt-2">
-                <label for="recipient-name" class="col-form-label">Produktivitas:</label>
+                <label for="recipient-name" class="col-form-label">Jml.Petani Pekebun (kk):</label>
+                <input type="text" class="form-control" id="recipient-name" name="jml_petani">
+              </div>
+              <div class="mt-2">
+                <label for="recipient-name" class="col-form-label">Produktivitas (kg/ha):</label>
                 <input type="text" class="form-control" id="recipient-name" name="produktivitas">
               </div>
               <div class="mt-2">
@@ -200,11 +210,15 @@
                 <input type="text" class="form-control"  name="produksi" id="produksi" value="{{ $item->produksi }}">
               </div>
               <div class="mt-2">
-                <label for="recipient-name" class="col-form-label">Produktivitas:</label>
+                <label for="recipient-name" class="col-form-label">Produktivitas (ton):</label>
                 <input type="text" class="form-control"  name="produktivitas" id="produktivitas" value="{{ $item->produktivitas }}">
               </div>
               <div class="mt-2">
-                <label for="recipient-name" class="col-form-label">Bentuk Hasil:</label>
+                <label for="recipient-name" class="col-form-label">Jml.Petani Pekebun (kk):</label>
+                <input type="text" class="form-control" id="recipient-name" name="jml_petani" value="{{ $item->jml_petani }}">
+              </div>
+              <div class="mt-2">
+                <label for="recipient-name" class="col-form-label">Bentuk Hasil (kg/ha):</label>
                 <input type="text" class="form-control"  name="bentuk_hasil" id="bentuk_hasil" value="{{ $item->bentuk_hasil }}">
               </div>
             

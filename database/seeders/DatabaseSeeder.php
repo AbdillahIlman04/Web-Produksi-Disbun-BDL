@@ -58,17 +58,19 @@ class DatabaseSeeder extends Seeder
             'tahun_id'=> '12'
         ]);
         // region::create([
-        //     'kabupaten_id'=>'1801',
-        //     'kecamatan_id'=>'1800121',
+        //     'kabupaten_id'=>'1802',
+        //     'kecamatan_id'=>'1802031',
         //     'tahun'=>'2019'
         // ]);
         areaproduksi::create([
             'komoditi'=>'Kelapa',
+            // 'areaproduksi_id' => '1',
             'tm'=>'9',
             'tbm'=>'5',
             'tr'=>'4',
             'produksi'=>'12',
             'produktivitas'=>'20',
+            'jml_petani'=>'15',
             'bentuk_hasil'=>'Kopra'
         ]);
 

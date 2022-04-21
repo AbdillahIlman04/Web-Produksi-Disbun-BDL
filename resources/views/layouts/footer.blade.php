@@ -27,7 +27,7 @@
  {{-- Ajax Setup --}}
  <script>
 
-let counter = 1
+  let counter = 1
 
   $(function(){
     $.ajaxSetup({
@@ -86,11 +86,12 @@ let counter = 1
 
           $.ajax({
             type : 'POST',
-            url  : "{{ route('getkecamatan') }}",
+            url  : "{{ route('getkecamatans') }}",
             data : {id_kabupaten:id_kabupaten},
             cache : false,
 
             success: function(msg){
+              console.log(msg);
               $('#kecamatan').html(msg);
           
             },
@@ -100,46 +101,103 @@ let counter = 1
           })
         })
 
-        $('#modalkabupaten').on('change',function(){
-          let id_kabupaten = $('#modalkabupaten').val();
+        $("#search").on("click", function(){
+
+          var link = document.getElementById("kecamatan").value;
 
           $.ajax({
-            type : 'POST',
-            url  : "{{ route('modalgetkecamatan') }}",
-            data : {id_kabupaten:id_kabupaten},
-            cache : false,
+            url:"{{ route('search') }}",
+          });
+        });
 
-            success: function(msg){
-              $('#modalkecamatan').html(msg);
-          
-            },
-            error: function(data){
-              console.log('error:',data)
-            },
-          })
-        })
+        // $('#modalkabupaten').on('change',function(){
+        //   let id_kabupaten = $('#modalkabupaten').val();
+        //   let id_region = $(data).attr('id')
 
-        $('#updatemodalkabupaten').on('change',function(){
-          let id_kabupaten = $('#updatemodalkabupaten').val();
+        //   $.ajax({
+        //     type : 'POST',
+        //     url  : "{{ route('modalgetkecamatan') }}",
+        //     data :  {
+        //          id_kabupaten:id_kabupaten,
+        //          id_region:id_region,
+        //     },
+        //     cache : false,
 
-          $.ajax({
-            type : 'POST',
-            url  : "{{ route('updatemodalgetkecamatan') }}",
-            data : {id_kabupaten:id_kabupaten},
-            cache : false,
+        //     success: function(msg){
+        //       $(`#modalkecamatan${msg.id}`).html(msg.data);
+        //       console.log(msg);
+        //     },
+        //     error: function(data){
+        //       console.log('error:',data)
+        //     },
+        //   })
+        // })
 
-            success: function(msg){
-              $('#updatemodalkecamatan').html(msg);
-          
-            },
-            error: function(data){
-              console.log('error:',data)
-            },
-          })
-        })
+        // $('#updatemodalkabupaten').on('change',function(){
+        //   let id_kabupaten = $('#updatemodalkabupaten').val();
+        //   console.log(id_kabupaten)
+
+        //   $.ajax({
+        //     type : 'POST',
+        //     url  : "{{ route('updatemodalgetkecamatan') }}",
+        //     data : {id_kabupaten:id_kabupaten},
+        //     cache : false,
+
+        //     success: function(msg){
+        //       $('#updatemodalkecamatan').html(msg);
+        //       console.log(msg);
+        //     },
+        //     error: function(data){
+        //       console.log('error:',data)
+        //     },
+        //   })
+        // })
   });
-  
 })
+
+  const modalKabupaten = (data) => {
+    let id_kabupaten = $(data).val();
+    let id_region = $(data).attr('id')
+    $.ajax({
+      type : 'POST',
+      url  : "{{ route('modalgetkecamatan') }}",
+      data : {
+        id_kabupaten:id_kabupaten,
+        id_region:id_region,
+      },
+      cache : false,
+
+      success: function(msg){
+        $(`#modalkecamatan${msg.id}`).html(msg.data);
+        console.log(msg);
+      },
+      error: function(data){
+        console.log('error:',data)
+      },
+    }) 
+  }
+
+  const updateModalKabupaten = (data) => {
+    let id_kabupaten = $(data).val();
+    let id_item = $(data).attr('id')
+    $.ajax({
+      type : 'POST',
+      url  : "{{ route('updatemodalgetkecamatan') }}",
+      data : {
+        id_kabupaten:id_kabupaten,
+        id_item:id_item,
+      },
+      cache : false,
+
+      success: function(msg){
+        $(`#updatemodalkecamatan${msg.id}`).html(msg.data);
+        console.log(msg);
+      },
+      error: function(data){
+        console.log('error:',data)
+      },
+    }) 
+  }
 </script>
 
 </body>

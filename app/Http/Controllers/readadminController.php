@@ -27,7 +27,6 @@ class readadminController extends Controller
         // dd($sumJumlah);
 
 
-
         $data = areaproduksi::all();
         $i = 0;
         $sumtm = 0;
@@ -36,6 +35,7 @@ class readadminController extends Controller
         $sumHasil = 0;
         $sumproduksi = 0;
         $sumproduktivitas = 0;
+        $sumjmlpetani = 0;
 
         for($i;$i<$data->count(); $i++){
             $bil1 = $data[$i]->tm;
@@ -63,16 +63,48 @@ class readadminController extends Controller
             $bil1 = $data[$i]->produktivitas;
             $sumproduktivitas = $bil1+$sumproduktivitas;
         }
+        for($i=0;$i<$data->count(); $i++){
+            $bil1 = $data[$i]->jml_petani;
+            $sumjmlpetani = $bil1+$sumjmlpetani;
+        }
 
         for($i=0;$i<$data->count(); $i++){
             $sumHasil = $hasil[$i] + $sumHasil;
         }
 
     
-        return view('admin.index',compact('data','hasil','sumtm','sumtbm','sumtr','sumproduksi','sumproduktivitas', 'sumHasil' ),[
+        return view('admin.index',compact('data','sumtm','sumtbm','sumtr','sumproduksi','sumproduktivitas', 'sumHasil','hasil','sumjmlpetani' ),[
             "active" => "Admin", 
             "title" => "Produksi Disbun | Admin", 
         ]);
+    }
+
+    public function user(){
+
+        $pengguna = User::all();
+        return view ('admin.user',compact('pengguna'),[
+            "title" => "Produksi Disbun | Data User"
+        ]);
+    }
+
+    public function insertdatauser(Request $request){
+        User::create($request->all());
+        return redirect()->route('admin/user');
+    }
+
+    public function edituser(Request $request,$id){
+        if($request->isMethod('post')){
+            $data = $request->all();
+
+            User::where(['id'=>$id])->update([
+                'name'=>$data['name'],
+                'email'=>$data['email'],
+                'password'=>$data['password'],
+            ]);
+            return redirect('admin');
+        }
+        // $data = areaproduksi::find($id);
+        // return view('admin.index',compact('data'));
     }
 
     public function detail($id){
@@ -103,6 +135,7 @@ class readadminController extends Controller
                 'tr'=>$data['tr'],
                 'produksi'=>$data['produksi'],
                 'produktivitas'=>$data['produktivitas'],
+                'jml_petani'=>$data['jml_petani'],
                 'bentuk_hasil'=>$data['bentuk_hasil']
             ]);
             return redirect('admin');
@@ -121,6 +154,13 @@ class readadminController extends Controller
 
     public function delete($id){
         $data=areaproduksi::find($id);
+        $data->delete();
+
+        return redirect()->route('admin');
+    }
+
+    public function deleteuser($id){
+        $data=User::find($id);
         $data->delete();
 
         return redirect()->route('admin');
